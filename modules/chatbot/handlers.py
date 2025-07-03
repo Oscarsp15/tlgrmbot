@@ -22,6 +22,7 @@ async def send_help(message: types.Message):
         "/start - Iniciar conversación con el bot\n"
         "/help - Mostrar este mensaje de ayuda\n"
         "/guess - Comenzar el juego de adivinar el número\n"
+        "/flag - Comenzar el juego de adivinar la bandera\n"
         "/cancel - Cancelar el juego actual"
     )
     await message.answer(text)
