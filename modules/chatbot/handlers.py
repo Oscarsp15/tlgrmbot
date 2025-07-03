@@ -1,4 +1,4 @@
-# modules/hello/handlers.py
+# modules/chatbot/handlers.py
 
 from aiogram import types, Dispatcher
 
