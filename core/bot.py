@@ -11,6 +11,7 @@ from config import BOT_TOKEN
 from modules.chatbot import router as chatbot_router
 from modules.guess_flag import router as flag_router
 from modules.guess_position import router as guess_router
+from modules.language import router as lang_router
 
 logger = logging.getLogger(__name__)
 
@@ -29,6 +30,7 @@ def create_dispatcher() -> Dispatcher:
     dp.include_router(chatbot_router)
     dp.include_router(guess_router)
     dp.include_router(flag_router)
+    dp.include_router(lang_router)
     return dp
 
 

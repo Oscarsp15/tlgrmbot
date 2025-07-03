@@ -9,5 +9,6 @@ def get_main_menu() -> ReplyKeyboardMarkup:
     builder.button(text="/guess")
     builder.button(text="/flag")
     builder.button(text="/cancel")
+    builder.button(text="/language")
     builder.adjust(2)
     return builder.as_markup(resize_keyboard=True)

@@ -3,6 +3,7 @@ from aiogram import Router, types
 from aiogram.filters import Command
 
 from keyboards.menu import get_main_menu
+from utils.language import translate_for_user
 
 router = Router()
 
@@ -10,8 +11,9 @@ router = Router()
 @router.message(Command("start"))
 async def send_welcome(message: types.Message):
     """Send a welcome message and show the main menu."""
+    text = f"¡Hola, {message.from_user.first_name}! 👋 Bienvenido al bot."
     await message.answer(
-        f"¡Hola, {message.from_user.first_name}! 👋 Bienvenido al bot.",
+        await translate_for_user(text, message.from_user.id),
         reply_markup=get_main_menu(),
     )
 
@@ -25,12 +27,16 @@ async def send_help(message: types.Message):
         "/help - Mostrar este mensaje de ayuda\n"
         "/guess - Comenzar el juego de adivinar el número\n"
         "/flag - Comenzar el juego de adivinar la bandera\n"
-        "/cancel - Cancelar el juego actual"
+        "/cancel - Cancelar el juego actual\n"
+        "/language - Cambiar idioma"
     )
-    await message.answer(text)
+    await message.answer(await translate_for_user(text, message.from_user.id))
 
 
 @router.message(Command("menu"))
 async def send_menu(message: types.Message):
     """Display the bot main menu."""
-    await message.answer("Selecciona una opción:", reply_markup=get_main_menu())
+    await message.answer(
+        await translate_for_user("Selecciona una opción:", message.from_user.id),
+        reply_markup=get_main_menu(),
+    )
