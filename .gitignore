@@ -1,0 +1,68 @@
+# Entornos virtuales
+venv/
+env/
+ENV/
+.venv/
+.python-version
+
+# Archivos Python bytecode
+__pycache__/
+*.py[cod]
+*$py.class
+
+# Archivos de configuración sensibles
+.env
+*.env
+.env.*
+
+# Archivos de logs
+*.log
+
+# Configuración de IDEs
+.vscode/
+.idea/
+*.sublime-project
+*.sublime-workspace
+
+# Archivos del sistema
+.DS_Store
+Thumbs.db
+
+# Archivos de pruebas
+.coverage
+htmlcov/
+.tox/
+.nox/
+.pytest_cache/
+nosetests.xml
+coverage.xml
+
+# Bases de datos locales o SQLite
+*.sqlite3
+*.db
+
+# Archivos temporales
+*.swp
+*.bak
+*.tmp
+
+# Archivos de paquetes
+dist/
+build/
+*.egg-info/
+
+# Jupyter notebooks checkpoints
+.ipynb_checkpoints
+
+# macOS
+*.DS_Store
+.AppleDouble
+.LSOverride
+
+# Windows
+ehthumbs.db
+Icon?
+Desktop.ini
+
+# Linux
+*~
