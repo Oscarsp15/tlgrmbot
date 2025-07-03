@@ -3,6 +3,7 @@ from aiogram.filters import Command
 from aiogram.fsm.context import FSMContext
 from aiogram.fsm.state import State, StatesGroup
 import asyncio
+from utils.language import translate_for_user
 
 from config import FLAG_ATTEMPTS
 from .services import get_random_country
@@ -24,7 +25,13 @@ async def cmd_flag(msg, state: FSMContext):
         bot_msg_id=None,
         chat_id=msg.chat.id,
     )
-    sent = await msg.answer_photo(flag_url, caption="⚫️ Adivina la bandera. Usa /cancel para abortar.")
+    sent = await msg.answer_photo(
+        flag_url,
+        caption=await translate_for_user(
+            "⚫️ Adivina la bandera. Usa /cancel para abortar.",
+            msg.from_user.id,
+        ),
+    )
     await state.update_data(bot_msg_id=sent.message_id)
     await asyncio.sleep(1)
     await msg.delete()
@@ -37,7 +44,16 @@ async def process_guess(msg, state: FSMContext):
     history = data["history"] + [f"{guess} - {'✅' if guess.lower()==data['country'].lower() else '❌'}"]
     await state.update_data(attempts=attempts, history=history)
 
-    caption = "\n".join(["⚫️ Adivina la bandera:", *history, f"Intentos: {attempts}/{FLAG_ATTEMPTS}.", "Usa /cancel para abortar."])
+    caption = "\n".join(
+        [
+            await translate_for_user("⚫️ Adivina la bandera:", msg.from_user.id),
+            *history,
+            await translate_for_user(
+                f"Intentos: {attempts}/{FLAG_ATTEMPTS}.", msg.from_user.id
+            ),
+            await translate_for_user("Usa /cancel para abortar.", msg.from_user.id),
+        ]
+    )
     bot = msg.bot
     await bot.edit_message_caption(chat_id=data["chat_id"], message_id=data["bot_msg_id"], caption=caption)
     await asyncio.sleep(2)
@@ -45,7 +61,10 @@ async def process_guess(msg, state: FSMContext):
 
     win = guess.lower() == data["country"].lower()
     if win or attempts >= FLAG_ATTEMPTS:
-        result = "🏆 ¡Correcto!" if win else f"❌ Fin del juego. Era {data['country']}"
+        result = await translate_for_user(
+            "🏆 \u00a1Correcto!" if win else f"❌ Fin del juego. Era {data['country']}",
+            msg.from_user.id,
+        )
         final_caption = caption + "\n" + result
         final_msg = await bot.edit_message_caption(chat_id=data["chat_id"], message_id=data["bot_msg_id"], caption=final_caption)
         await asyncio.sleep(5)
@@ -57,7 +76,9 @@ async def cancel(msg, state: FSMContext):
     data = await state.get_data()
     bot = msg.bot
     await bot.delete_message(chat_id=data["chat_id"], message_id=data["bot_msg_id"])
-    temp = await msg.answer("🔚 Juego cancelado.")
+    temp = await msg.answer(
+        await translate_for_user("🔚 Juego cancelado.", msg.from_user.id)
+    )
     await asyncio.sleep(2)
     await msg.delete()
     await asyncio.sleep(5)
@@ -66,7 +87,9 @@ async def cancel(msg, state: FSMContext):
 
 @router.message(FlagGame.playing)
 async def invalid(msg, state: FSMContext):
-    temp = await msg.answer("❗ Ingresa el nombre de un país.")
+    temp = await msg.answer(
+        await translate_for_user("❗ Ingresa el nombre de un país.", msg.from_user.id)
+    )
     await asyncio.sleep(1)
     await msg.delete()
     await asyncio.sleep(2)
